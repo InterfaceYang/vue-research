@@ -20,6 +20,7 @@ export function initInjections (vm: Component) {
     Object.keys(result).forEach(key => {
       /* istanbul ignore else */
       if (process.env.NODE_ENV !== 'production') {
+        // 看上去inject过来的东西也是可以响应式
         defineReactive(vm, key, result[key], () => {
           warn(
             `Avoid mutating an injected value directly since the changes will be ` +
@@ -29,6 +30,7 @@ export function initInjections (vm: Component) {
           )
         })
       } else {
+                // 看上去inject过来的东西也是可以响应式
         defineReactive(vm, key, result[key])
       }
     })

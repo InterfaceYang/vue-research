@@ -109,6 +109,7 @@ function initProps (vm: Component, propsOptions: Object) {
   toggleObserving(true)
 }
 
+// 初始化各种东西
 function initData (vm: Component) {
   let data = vm.$options.data
   data = vm._data = typeof data === 'function'

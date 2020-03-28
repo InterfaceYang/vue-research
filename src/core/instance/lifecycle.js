@@ -29,6 +29,7 @@ export function setActiveInstance(vm: Component) {
   }
 }
 
+
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 
@@ -41,12 +42,14 @@ export function initLifecycle (vm: Component) {
     parent.$children.push(vm)
   }
 
+  // 初始化值，这里说明，子组件创建的时候，父组件已经存在了
   vm.$parent = parent
   vm.$root = parent ? parent.$root : vm
 
   vm.$children = []
   vm.$refs = {}
 
+  // _开头的都是内部用的，不希望用户使用
   vm._watcher = null
   vm._inactive = null
   vm._directInactive = false

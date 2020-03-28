@@ -3,6 +3,7 @@ import { initGlobalAPI } from './global-api/index'
 import { isServerRendering } from 'core/util/env'
 import { FunctionalRenderContext } from 'core/vdom/create-functional-component'
 
+// 看名字像加载全局api的  $set $delete $extend 等
 initGlobalAPI(Vue)
 
 Object.defineProperty(Vue.prototype, '$isServer', {

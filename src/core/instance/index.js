@@ -5,16 +5,18 @@ import { eventsMixin } from './events'
 import { lifecycleMixin } from './lifecycle'
 import { warn } from '../util/index'
 
+// vue的构造函数
+
 function Vue (options) {
-  if (process.env.NODE_ENV !== 'production' &&
-    !(this instanceof Vue)
-  ) {
-    warn('Vue is a constructor and should be called with the `new` keyword')
-  }
+  // if (process.env.NODE_ENV !== 'production' &&
+  //   !(this instanceof Vue)
+  // ) {
+  //   warn('Vue is a constructor and should be called with the `new` keyword')
+  // }
   this._init(options)
 }
 
-initMixin(Vue)
+initMixin(Vue)   // 看上去是实现_init方法的
 stateMixin(Vue)
 eventsMixin(Vue)
 lifecycleMixin(Vue)

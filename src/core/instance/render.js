@@ -28,6 +28,9 @@ export function initRender (vm: Component) {
   // so that we get proper render context inside it.
   // args order: tag, data, children, normalizationType, alwaysNormalize
   // internal version is used by render functions compiled from templates
+
+  // render(){ h()} 这里就是createElement
+
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // normalization is always applied for the public version, used in
   // user-written render functions.
@@ -39,13 +42,14 @@ export function initRender (vm: Component) {
 
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
-    defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
-      !isUpdatingChildComponent && warn(`$attrs is readonly.`, vm)
-    }, true)
-    defineReactive(vm, '$listeners', options._parentListeners || emptyObject, () => {
-      !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
-    }, true)
+    // defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
+    //   !isUpdatingChildComponent && warn(`$attrs is readonly.`, vm)
+    // }, true)
+    // defineReactive(vm, '$listeners', options._parentListeners || emptyObject, () => {
+    //   !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
+    // }, true)
   } else {
+    // 响应式的东东
     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
     defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
   }
