@@ -22,15 +22,22 @@ Vue.prototype.$mount = function (
   el = el && query(el)
 
   /* istanbul ignore if */
-  if (el === document.body || el === document.documentElement) {
-    process.env.NODE_ENV !== 'production' && warn(
-      `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
-    )
-    return this
-  }
+  // if (el === document.body || el === document.documentElement) {
+  //   process.env.NODE_ENV !== 'production' && warn(
+  //     `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
+  //   )
+  //   return this
+  // }
 
   const options = this.$options
   // resolve template/el and convert to render function
+  /*
+  new Vue({
+    render() {
+
+    }
+  })
+  */
   if (!options.render) {
     let template = options.template
     if (template) {
@@ -38,30 +45,34 @@ Vue.prototype.$mount = function (
         if (template.charAt(0) === '#') {
           template = idToTemplate(template)
           /* istanbul ignore if */
-          if (process.env.NODE_ENV !== 'production' && !template) {
-            warn(
-              `Template element not found or is empty: ${options.template}`,
-              this
-            )
-          }
+          // if (process.env.NODE_ENV !== 'production' && !template) {
+          //   warn(
+          //     `Template element not found or is empty: ${options.template}`,
+          //     this
+          //   )
+          // }
         }
+        // 原始节点
       } else if (template.nodeType) {
         template = template.innerHTML
       } else {
-        if (process.env.NODE_ENV !== 'production') {
-          warn('invalid template option:' + template, this)
-        }
+        // if (process.env.NODE_ENV !== 'production') {
+        //   warn('invalid template option:' + template, this)
+        // }
         return this
       }
+      // if(!render) => templaye => el 优先级越来越低
     } else if (el) {
       template = getOuterHTML(el)
     }
     if (template) {
       /* istanbul ignore if */
-      if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-        mark('compile')
-      }
+      // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+      //   mark('compile')
+      // }
 
+      //如果是模板字符串，需要用编译器编译，得到render函数
+      // 有时间看下这个   compileToFunctions 
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
@@ -73,12 +84,13 @@ Vue.prototype.$mount = function (
       options.staticRenderFns = staticRenderFns
 
       /* istanbul ignore if */
-      if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-        mark('compile end')
-        measure(`vue ${this._name} compile`, 'compile', 'compile end')
-      }
+      // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+      //   mark('compile end')
+      //   measure(`vue ${this._name} compile`, 'compile', 'compile end')
+      // }
     }
   }
+  // 把mount返回去了
   return mount.call(this, el, hydrating)
 }
 
