@@ -52,9 +52,9 @@ export function initMixin (Vue: Class<Component>) {
     vm._self = vm
 
     // 下边是一些重要的东西
-    initLifecycle(vm)
+    initLifecycle(vm) // 初始化一些 $parent 等
     initEvents(vm)  
-    initRender(vm)
+    initRender(vm)    //render函数在这里
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
     initState(vm)     // 初始化各种状态，很牛批
