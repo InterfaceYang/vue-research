@@ -127,6 +127,7 @@ export default class Watcher {
    */
   addDep (dep: Dep) {
     const id = dep.id
+    // watch和dep相互多对多引用
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id)
       this.newDeps.push(dep)
@@ -161,6 +162,8 @@ export default class Watcher {
    * Subscriber interface.
    * Will be called when a dependency changes.
    */
+
+   // 如何做优化，这里，引入了个queueWatcher，瞅瞅
   update () {
     /* istanbul ignore else */
     if (this.lazy) {

@@ -184,6 +184,7 @@ export function queueWatcher (watcher: Watcher) {
         flushSchedulerQueue()
         return
       }
+      // 攒够更新，实际进行更新
       nextTick(flushSchedulerQueue)
     }
   }

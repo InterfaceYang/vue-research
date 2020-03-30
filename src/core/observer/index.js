@@ -44,6 +44,7 @@ export class Observer {
     this.dep = new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
+    // 数组额外对待
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
@@ -52,6 +53,7 @@ export class Observer {
       }
       this.observeArray(value)
     } else {
+      // 这里主要还是对obj的处理
       this.walk(value)
     }
   }
@@ -121,6 +123,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
+    // 初始化Observer
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -141,6 +144,7 @@ export function defineReactive (
 ) {
   const dep = new Dep()
 
+  // 看有人是否手动写了set get之类的东东
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -152,17 +156,22 @@ export function defineReactive (
   if ((!getter || setter) && arguments.length === 2) {
     val = obj[key]
   }
-
+  // 递归observe
   let childOb = !shallow && observe(val)
+
+
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
+        // dep管理watch
         dep.depend()
         if (childOb) {
           childOb.dep.depend()
+
+          // d对数组额外处理下
           if (Array.isArray(value)) {
             dependArray(value)
           }
@@ -187,7 +196,9 @@ export function defineReactive (
       } else {
         val = newVal
       }
+      // 又递归了
       childOb = !shallow && observe(newVal)
+      // notify了一下
       dep.notify()
     }
   })
