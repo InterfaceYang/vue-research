@@ -90,7 +90,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // updated hook is called by the scheduler to ensure that children are
     // updated in a parent's updated hook.
   }
-
+   
+  // 一切不按照预期的页面显示，forceUpdate一下
   Vue.prototype.$forceUpdate = function () {
     const vm: Component = this
     if (vm._watcher) {

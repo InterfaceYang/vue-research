@@ -99,6 +99,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
   })
   if (!pending) {
     pending = true
+    // 对异步操作的细粒级别操作
     timerFunc()
   }
   // $flow-disable-line

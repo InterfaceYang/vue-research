@@ -55,6 +55,9 @@ export function initState (vm: Component) {
   } else {
     observe(vm._data = {}, true /* asRootData */)
   }
+  // computed   watch
+  // 各种属性和方法
+  
   if (opts.computed) initComputed(vm, opts.computed)
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
@@ -112,9 +115,12 @@ function initProps (vm: Component, propsOptions: Object) {
 // 初始化各种东西
 function initData (vm: Component) {
   let data = vm.$options.data
+
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
+
+
   if (!isPlainObject(data)) {
     data = {}
     process.env.NODE_ENV !== 'production' && warn(
@@ -127,17 +133,20 @@ function initData (vm: Component) {
   const keys = Object.keys(data)
   const props = vm.$options.props
   const methods = vm.$options.methods
+  
+
+
   let i = keys.length
   while (i--) {
     const key = keys[i]
-    if (process.env.NODE_ENV !== 'production') {
-      if (methods && hasOwn(methods, key)) {
-        warn(
-          `Method "${key}" has already been defined as a data property.`,
-          vm
-        )
-      }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   if (methods && hasOwn(methods, key)) {
+    //     warn(
+    //       `Method "${key}" has already been defined as a data property.`,
+    //       vm
+    //     )
+    //   }
+    // }
     if (props && hasOwn(props, key)) {
       process.env.NODE_ENV !== 'production' && warn(
         `The data property "${key}" is already declared as a prop. ` +
@@ -149,6 +158,7 @@ function initData (vm: Component) {
     }
   }
   // observe data
+  //  observe
   observe(data, true /* asRootData */)
 }
 
@@ -337,9 +347,13 @@ export function stateMixin (Vue: Class<Component>) {
       warn(`$props is readonly.`, this)
     }
   }
+
+  // 定义$data 和 $props
   Object.defineProperty(Vue.prototype, '$data', dataDef)
   Object.defineProperty(Vue.prototype, '$props', propsDef)
 
+ 
+  // $set $delete  $watch  
   Vue.prototype.$set = set
   Vue.prototype.$delete = del
 
