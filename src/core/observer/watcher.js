@@ -44,7 +44,7 @@ export default class Watcher {
 
   constructor (
     vm: Component,
-    expOrFn: string | Function,
+    expOrFn: string | Function, // 可能是表达式，也可能是函数 new Watcher(this._vm, 'obj')
     cb: Function,
     options?: ?Object,
     isRenderWatcher?: boolean
@@ -76,7 +76,8 @@ export default class Watcher {
       ? expOrFn.toString()
       : ''
     // parse expression for getter
-    if (typeof expOrFn === 'function') {
+    if (typeof expOrFn === 'function') 
+      // 如果是函数，这就是组件初始化的时候那个东东
       this.getter = expOrFn
     } else {
       this.getter = parsePath(expOrFn)

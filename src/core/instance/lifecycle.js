@@ -61,17 +61,18 @@ export function initLifecycle (vm: Component) {
 export function lifecycleMixin (Vue: Class<Component>) {
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
-    const prevEl = vm.$el
-    const prevVnode = vm._vnode
+    const prevEl = vm.$el  // 之前的dom
+    const prevVnode = vm._vnode  // 之前的虚拟节点
     const restoreActiveInstance = setActiveInstance(vm)
     vm._vnode = vnode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
-    if (!prevVnode) {
+    if (!prevVnode) {  // 木有老的就初始化
       // initial render
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
       // updates
+      // prevVnode，这里看上去就是path新老差距然后补丁算法
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
     restoreActiveInstance()
@@ -141,36 +142,47 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+// $.mout('#app')
+
+// new Vue({}).$mount('#app')
+// 这里就是初始化vue实例的时候的$mout
+
 export function mountComponent (
-  vm: Component,
+  vm: Component, 
   el: ?Element,
   hydrating?: boolean
 ): Component {
   vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
-    if (process.env.NODE_ENV !== 'production') {
-      /* istanbul ignore if */
-      if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
-        vm.$options.el || el) {
-        warn(
-          'You are using the runtime-only build of Vue where the template ' +
-          'compiler is not available. Either pre-compile the templates into ' +
-          'render functions, or use the compiler-included build.',
-          vm
-        )
-      } else {
-        warn(
-          'Failed to mount component: template or render function not defined.',
-          vm
-        )
-      }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   /* istanbul ignore if */
+    //   if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
+    //     vm.$options.el || el) {
+    //     warn(
+    //       'You are using the runtime-only build of Vue where the template ' +
+    //       'compiler is not available. Either pre-compile the templates into ' +
+    //       'render functions, or use the compiler-included build.',
+    //       vm
+    //     )
+    //   } else {
+    //     warn(
+    //       'Failed to mount component: template or render function not defined.',
+    //       vm
+    //     )
+    //   }
+    // }
   }
+
+
   callHook(vm, 'beforeMount')
 
+
   let updateComponent
+
+
   /* istanbul ignore if */
+  // 如果不是生产环境，并且打开了性能调试之类的东东
   if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
     updateComponent = () => {
       const name = vm._name
@@ -184,8 +196,15 @@ export function mountComponent (
       measure(`vue ${name} render`, startTag, endTag)
 
       mark(startTag)
+
+      // vnode = vm._render(),render函数会返回虚拟dom，这里好像是对
+      // 对虚拟dom进行更新，八成是对dom的真实操作是在这
       vm._update(vnode, hydrating)
+
+
+
       mark(endTag)
+      // 这里看上去是mark开始标签和结束标签，有点不值所云
       measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
@@ -197,6 +216,10 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+
+  // 这里可以看出，是一个Vue组件一个Watcher。除非用户写了￥watcher
+  // 一个Dep对应多个Watcher
+
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {

@@ -92,7 +92,7 @@ function initProps (vm: Component, propsOptions: Object) {
             `overwritten whenever the parent component re-renders. ` +
             `Instead, use a data or computed property based on the prop's ` +
             `value. Prop being mutated: "${key}"`,
-            vm
+            vm 
           )
         }
       })

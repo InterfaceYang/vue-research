@@ -128,6 +128,7 @@ export function renderMixin (Vue: Class<Component>) {
     }
     // set parent
     vnode.parent = _parentVnode
+    // 计算一堆虚拟节点，然后返回虚拟dom
     return vnode
   }
 }
